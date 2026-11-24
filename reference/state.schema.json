@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://akoris.local/schemas/state.v2.schema.json",
+  "title": "Schéma AKORIS v2.0 — state.json",
+  "description": "Schéma technique de l'état opérationnel pour la Norme AKORIS v2.0 (décision A2). Le pilote v1.0 est une version héritée, non conforme au modèle normatif actuel. Ce schéma ne prétend pas valider directement le pilote v1.0 sans mécanisme de migration ou d'adaptation. Il ne certifie aucune permission technique et ne prouve aucun test.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol",
+    "governance",
+    "project",
+    "checkpoints",
+    "sprint",
+    "agent",
+    "transition",
+    "last_decision",
+    "blockers",
+    "reserves",
+    "change_control",
+    "permission_violations",
+    "transition_history"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "AKORIS" },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "profile_locked", "selected_by", "selected_at"],
+      "properties": {
+        "profile": { "$ref": "#/$defs/profile" },
+        "profile_locked": { "type": "boolean" },
+        "selected_by": { "const": "VALIDATOR" },
+        "selected_at": { "$ref": "#/$defs/nullableTimestamp" }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "status", "created_at", "updated_at"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/projectStatus" },
+        "created_at": { "$ref": "#/$defs/nullableTimestamp" },
+        "updated_at": { "$ref": "#/$defs/nullableTimestamp" }
+      }
+    },
+    "checkpoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cp1", "cp2", "cp3"],
+      "properties": {
+        "cp1": { "$ref": "#/$defs/checkpointStatus" },
+        "cp2": { "$ref": "#/$defs/checkpointStatus" },
+        "cp3": { "$ref": "#/$defs/checkpointStatus" }
+      }
+    },
+    "sprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_id", "current_status", "next_id"],
+      "properties": {
+        "current_id": { "$ref": "#/$defs/nullableString" },
+        "current_status": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/sprintStatus" }
+          ]
+        },
+        "next_id": { "$ref": "#/$defs/nullableString" }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_agent", "state_owner"],
+      "properties": {
+        "current_agent": { "$ref": "#/$defs/agent" },
+        "state_owner": { "const": "ORCHESTRATOR" }
+      }
+    },
+    "transition": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transition_id",
+            "status",
+            "from_agent",
+            "to_agent",
+            "mandate_version",
+            "action",
+            "created_at",
+            "expires_at",
+            "authorized_at",
+            "consumed_at",
+            "receipt_reference",
+            "sprint_id",
+            "authorized_by",
+            "decision_id",
+            "completed_at",
+            "result_report"
+          ],
+          "properties": {
+            "transition_id": {
+              "type": "string",
+              "pattern": "^TR-[0-9]{4}-[0-9]{4}$"
+            },
+            "status": { "$ref": "#/$defs/transitionStatus" },
+            "from_agent": { "$ref": "#/$defs/agent" },
+            "to_agent": { "$ref": "#/$defs/agent" },
+            "mandate_version": { "type": "string", "minLength": 1 },
+            "action": { "type": "string", "minLength": 1 },
+            "created_at": { "$ref": "#/$defs/nullableTimestamp" },
+            "expires_at": { "$ref": "#/$defs/nullableTimestamp" },
+            "authorized_at": { "$ref": "#/$defs/nullableTimestamp" },
+            "consumed_at": { "$ref": "#/$defs/nullableTimestamp" },
+            "receipt_reference": { "$ref": "#/$defs/nullableString" },
+            "sprint_id": { "$ref": "#/$defs/nullableString" },
+            "authorized_by": { "enum": [null, "VALIDATOR"] },
+            "decision_id": { "$ref": "#/$defs/nullableString" },
+            "completed_at": { "$ref": "#/$defs/nullableTimestamp" },
+            "result_report": { "$ref": "#/$defs/nullableString" }
+          }
+        }
+      ]
+    },
+    "last_decision": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "author", "date", "motif"],
+          "properties": {
+            "value": { "$ref": "#/$defs/decisionValue" },
+            "author": { "const": "VALIDATOR" },
+            "date": { "type": "string", "format": "date-time" },
+            "motif": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "blockers": { "type": "array", "items": { "$ref": "#/$defs/traceItem" } },
+    "reserves": { "type": "array", "items": { "$ref": "#/$defs/traceItem" } },
+    "change_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_changes", "change_history"],
+      "properties": {
+        "active_changes": { "type": "array", "items": { "$ref": "#/$defs/traceItem" } },
+        "change_history": { "type": "array", "items": { "$ref": "#/$defs/traceItem" } }
+      }
+    },
+    "permission_violations": { "type": "array", "items": { "$ref": "#/$defs/traceItem" } },
+    "transition_history": { "type": "array", "items": { "$ref": "#/$defs/transitionRecord" } }
+  },
+  "$defs": {
+    "profile": {
+      "enum": ["lite", "standard", "reinforced"]
+    },
+    "agent": {
+      "enum": ["ORCHESTRATOR", "BUILDER", "AUDITOR", "VALIDATOR"]
+    },
+    "decisionValue": {
+      "enum": ["GO", "GO_WITH_RESERVES", "NO_GO", "HOLD", "CANCELLED"]
+    },
+    "projectStatus": {
+      "enum": ["initializing", "framing", "designing", "planning", "preparing", "ready", "in_progress", "under_review", "blocked", "suspended", "completed", "cancelled"]
+    },
+    "checkpointStatus": {
+      "enum": ["pending", "in_review", "validated", "rejected"]
+    },
+    "sprintStatus": {
+      "enum": [
+        "planned",
+        "preparing",
+        "awaiting_authorization",
+        "authorized",
+        "in_progress",
+        "builder_completed",
+        "auditing",
+        "audit_completed",
+        "accepted",
+        "accepted_with_reserves",
+        "rejected",
+        "correcting",
+        "merged",
+        "closed",
+        "cancelled"
+      ]
+    },
+    "transitionStatus": {
+      "enum": [
+        "draft",
+        "awaiting_human_go",
+        "authorized",
+        "consumed",
+        "in_progress",
+        "completed",
+        "rejected",
+        "expired",
+        "cancelled"
+      ]
+    },
+    "nullableString": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "minLength": 1 }
+      ]
+    },
+    "nullableTimestamp": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "format": "date-time" }
+      ]
+    },
+    "traceItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "transitionRecord": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["transition_id", "status"],
+      "properties": {
+        "transition_id": {
+          "type": "string",
+          "pattern": "^TR-[0-9]{4}-[0-9]{4}$"
+        },
+        "status": { "$ref": "#/$defs/transitionStatus" }
+      }
+    }
+  }
+}
