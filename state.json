@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "protocol": {
+    "name": "AKORIS",
+    "version": "1.0"
+  },
+  "governance": {
+    "profile": "standard",
+    "profile_locked": true,
+    "selected_by": "VALIDATOR",
+    "selected_at": "2026-11-24"
+  },
+  "project": {
+    "id": "C0",
+    "name": "Inventaire et état de référence du corpus AKORIS",
+    "status": "framing",
+    "created_at": "2026-11-24",
+    "updated_at": "2026-11-24"
+  },
+  "checkpoints": {
+    "cp1": "pending",
+    "cp2": "pending",
+    "cp3": "pending"
+  },
+  "sprint": {
+    "current_id": null,
+    "current_status": "framing",
+    "next_id": "sprint_C0"
+  },
+  "agent": {
+    "current_agent": "BUILDER",
+    "state_owner": "ORCHESTRATOR"
+  },
+  "transition": {
+    "transition_id": "TR-2026-0004",
+    "status": "authorized",
+    "from_agent": "ORCHESTRATOR",
+    "to_agent": "BUILDER",
+    "mandate_version": "C3-expérimentation-v1",
+    "action": "run_experiments",
+    "sprint_id": "sprint_C3",
+    "created_at": "2026-11-24T11:30:00Z",
+    "expires_at": null,
+    "authorized_at": "2026-11-24T11:35:00Z",
+    "authorized_by": "VALIDATOR",
+    "decision_id": "D-001-HVG2",
+    "consumed_at": null,
+    "receipt_reference": "RC-2026-0004-C3",
+    "completed_at": null,
+    "result_report": null
+  },
+  "last_decision": {
+    "id": "D-001-HVG0",
+    "date": "2026-11-24",
+    "author": "VALIDATOR",
+    "value": "GO_WITH_RESERVES",
+    "motif": "Mandat C0 révisé conforme au plan_de_consolidation.md ; 5 réserves documentées et conservées ; autorisation de démarrage C0 avec conditions ",
+    "perimetre": "Inventaire et état de référence du corpus AKORIS, lecture seule, livrables dans espace distinct",
+    "reserves": [
+      "R1: Frontière C0-07 / C0-09 — distinction lacunes/questions/dépendances vs statuts documentaires à maintenir sans chevauchement",
+      "R2: Classification multi-catégories — gestion documentaire par catégorie principale + secondaires le cas échéant",
+      "R3: Attribution autorité sources historiques (C0-08) — vigilance requise contre attribution implicite d'autorité normative",
+      "R4: État de référence vs state.json/state.md — distinction état de référence C0 (markdown autonome, figé) vs états opérationnels",
+      "R5: Fichiers .gitignore et ignorés — politique d'inclusion/exclusion à documenter en début d'inventaire"
+    ],
+    "effet": "C1 terminé HVG1 GO_WITH_RESERVES ; merge dev_C1→main effectué ; élaboration mandat C2 vérification technique avec 5 réserves R1-R5 + 10 actions prioritaires H1-H5 M1-M3 B1-B2 ; transition C1→C2 en cours"
+  },
+  "blockers": [],
+  "reserves": [
+    "R1: Frontière C0-07 / C0-09 — distinction lacunes/questions/dépendances vs statuts documentaires",
+    "R2: Classification multi-catégories — catégorie principale + secondaires le cas échéant",
+    "R3: Attribution autorité sources historiques (C0-08) — vigilance contre attribution implicite",
+    "R4: État de référence vs state.json/state.md — distinction état de référence C0 (markdown) vs états opérationnels",
+    "R5: Fichiers .gitignore et ignorés — politique d'inclusion/exclusion à documenter"
+  ],
+  "change_control": {
+    "active_changes": [],
+    "change_history": [
+      {
+        "id": "CC-2026-0001",
+        "date": "2026-11-24",
+        "author": "ORCHESTRATOR",
+        "description": "Création initiale de state.json avec enregistrement décision GO_WITH_RESERVES VALIDATOR",
+        "affected": "state.json",
+        "justification": "Enregistrement de la décision HVG0 GO_WITH_RESERVES pour démarrage C0"
+      },
+      {
+        "id": "CC-2026-0002",
+        "date": "2026-11-24",
+        "author": "ORCHESTRATOR",
+        "description": "Mise à jour état suite verdict audit C0 PASS_WITH_RESERVES ; recommandation HVG0-B GO_WITH_RESERVES",
+        "affected": "state.json last_decision effet",
+        "justification": "Réflexion audit C0 terminé, préparation transition vers C1 avec réserves maintenues et actions prioritaires"
+      },
+      {
+        "id": "CC-2026-0003",
+        "date": "2026-11-24",
+        "author": "ORCHESTRATOR",
+        "description": "Fusion dev_C0 → main autorisée par HVG0-B GO_WITH_RESERVES ; lancement C1",
+        "affected": "main dev_C0 transition C0→C1",
+        "justification": "Décision VALIDATOR HVG0-B autorise fusion et élaboration mandat C1 avec réserves et actions prioritaires"
+      },
+      {
+        "id": "CC-2026-0004",
+        "date": "2026-11-24",
+        "author": "ORCHESTRATOR",
+        "description": "Mise à jour état suite merge dev_C1 → main et création transition C2 TR-2026-0003",
+        "affected": "state.json transition, main historiqué",
+        "justification": "Démarrage C2 vérification technique, 15 items résiduels à traiter"
+      }
+    ]
+  },
+  "permission_violations": []
+}
